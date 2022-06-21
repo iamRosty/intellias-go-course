@@ -11,10 +11,3 @@ func main() {
 		}
 	}
 }
-
-/* Писав:  if _, ok := uniqChecker[val]
-		!ok{
-   			uniqChecker[val] = 1
-   			result = append(result, val)
-		}
-, а staticcheck запропонував таку конструкцiю, треба запам`ятати)  */
