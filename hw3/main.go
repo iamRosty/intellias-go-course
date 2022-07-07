@@ -10,75 +10,81 @@ const (
 	cowFoodPerKgWeight kg = 25.
 )
 
-type Animal interface {
+type animal interface {
 	getFoodWeight() kg
-	getInfo()
 }
 
-type Dog struct {
-	name               string
-	weight, foodWeight kg
+type dog struct {
+	name   string
+	weight kg
 }
 
-func (d *Dog) getFoodWeight() kg {
-	return d.foodWeight
+func (d *dog) getFoodWeight() kg {
+	return d.weight * dogFoodPerKgWeight
 }
 
-func (d *Dog) getInfo() {
-	fmt.Printf("Name: %v, Weight: %v kg, Need %v kg food.\n", d.name, d.weight, d.foodWeight)
+func newdog(name string, weight kg) *dog {
+	return &dog{name, weight}
 }
 
-func newDog(name string, weight kg) *Dog {
-	return &Dog{name, weight, weight * dogFoodPerKgWeight}
+type cat struct {
+	name   string
+	weight kg
 }
 
-type Cat struct {
-	name               string
-	weight, foodWeight kg
+func (c *cat) getFoodWeight() kg {
+	return c.weight * catFoodPerKgWeight
 }
 
-func (c *Cat) getFoodWeight() kg {
-	return c.foodWeight
+func newcat(name string, weight kg) *cat {
+	return &cat{name, weight}
 }
 
-func (c *Cat) getInfo() {
-	fmt.Printf("Name: %v, Weight: %v kg, Need %v kg food.\n", c.name, c.weight, c.foodWeight)
+type cow struct {
+	name   string
+	weight kg
 }
 
-func newCat(name string, weight kg) *Cat {
-	return &Cat{name, weight, weight * catFoodPerKgWeight}
+func (c *cow) getFoodWeight() kg {
+	return c.weight * cowFoodPerKgWeight
 }
 
-type Cow struct {
-	name               string
-	weight, foodWeight kg
+func (c *cow) getInfo() {
+	fmt.Printf("Name: %v, Weight: %v kg, Need %v kg food.\n", c.name, c.weight, c.weight*cowFoodPerKgWeight)
 }
 
-func (c *Cow) getFoodWeight() kg {
-	return c.foodWeight
+func newcow(name string, weight kg) *cow {
+	return &cow{name, weight}
 }
 
-func (c *Cow) getInfo() {
-	fmt.Printf("Name: %v, Weight: %v kg, Need %v kg food.\n", c.name, c.weight, c.foodWeight)
-}
-
-func newCow(name string, weight kg) *Cow {
-	return &Cow{name, weight, weight * cowFoodPerKgWeight}
-}
-
-func myFunction(a ...Animal) kg {
-	var totalFoodweight kg
+func farmInfo(a ...animal) kg {
+	var name string
+	var weight, foodWeight, totalFoodweight kg
 	for _, v := range a {
-		v.getInfo()
+		switch x := v.(type) {
+		case *dog:
+			name = x.name
+			weight = x.weight
+			foodWeight = x.weight * dogFoodPerKgWeight
+		case *cat:
+			name = x.name
+			weight = x.weight
+			foodWeight = x.weight * catFoodPerKgWeight
+		case *cow:
+			name = x.name
+			weight = x.weight
+			foodWeight = x.weight * cowFoodPerKgWeight
+		}
+		fmt.Printf("Name: %v, Weight: %v kg, Need %v kg food.\n", name, weight, foodWeight)
 		totalFoodweight += v.getFoodWeight()
 	}
 
 	return totalFoodweight
 }
 func main() {
-	c := newCat("Tom", 7)
-	c1 := newCat("Lisa", 5)
-	d := newDog("Pluto", 15)
-	t := myFunction(c, c1, d)
+	c := newcat("Tom", 7)
+	c1 := newcat("Lisa", 5)
+	d := newdog("Pluto", 15)
+	t := farmInfo(c, c1, d)
 	fmt.Println("Total food weight(kg):", t)
 }
