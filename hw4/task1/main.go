@@ -14,19 +14,18 @@ func main() {
 
 	wg := sync.WaitGroup{}
 	wg.Add(len(n))
-	for i := 0; i < len(n); i++ {
-		s := n[i]
-		go func([]int) {
+	for i, v := range n {
+		go func(v []int, i int) {
 			defer wg.Done()
-			sum(s)
-		}(s)
+			sum(v, i)
+		}(v, i)
 	}
 	wg.Wait()
 }
-func sum(slc []int) {
+func sum(slc []int, i int) {
 	sum := 0
 	for _, v := range slc {
 		sum += v
 	}
-	fmt.Println("slice elements sum: ", sum)
+	fmt.Printf("slice %v:  %v\n", i+1, sum)
 }
