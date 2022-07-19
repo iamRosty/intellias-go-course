@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func main() {
 	n := [][]int{
 		{2, 6, 9, 24},
@@ -16,7 +14,7 @@ func main() {
 		}(v)
 		result += <-chanSum
 	}
-	fmt.Println("result:", result)
+	print("result: ", result)
 }
 
 func sum(slc []int, chanSum chan int) {
