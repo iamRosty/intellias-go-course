@@ -6,19 +6,23 @@ func main() {
 		{7, 3, 94, 3, 0},
 		{4, 2, 8, 35},
 	}
-	result := 0
-	chanSum := make(chan int)
+	var result int
+	chanSum := make(chan int, 3)
 	for _, v := range n {
 		go func(v []int) {
+
 			sum(v, chanSum)
 		}(v)
+	}
+	for i := 0; i < len(n); i++ {
 		result += <-chanSum
 	}
+	close(chanSum)
 	print("result: ", result)
 }
 
 func sum(slc []int, chanSum chan int) {
-	sum := 0
+	var sum int
 	for _, v := range slc {
 		sum += v
 	}
