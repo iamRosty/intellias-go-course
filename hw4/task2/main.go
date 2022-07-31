@@ -9,10 +9,7 @@ func main() {
 	var result int
 	chanSum := make(chan int, 3)
 	for _, v := range n {
-		go func(v []int) {
-
-			sum(v, chanSum)
-		}(v)
+		go sum(v, chanSum)
 	}
 	for i := 0; i < len(n); i++ {
 		result += <-chanSum
